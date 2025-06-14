@@ -1,0 +1,153 @@
+export const translations = {
+  en: {
+    nav: {
+      about: "About",
+      skills: "Skills",
+      projects: "Projects",
+      contact: "Contact",
+      support: "Support",
+    },
+    hero: {
+      role: "Full-Stack Developer",
+      downloadResume: "Download Resume",
+    },
+    about: {
+      title: "About Me",
+      description1:
+        "I'm a versatile developer with experience spanning from frontend and backend web development to embedded systems programming. My journey in technology has led me to work on a diverse range of projects, from university assignments to practical applications that solve real-world problems.",
+      description2:
+        "With a strong foundation in JavaScript, TypeScript, PHP, and C/C++ for embedded systems, I enjoy tackling complex challenges and bringing innovative solutions to life. I'm particularly passionate about creating intuitive user experiences and building robust backend systems.",
+    },
+    skills: {
+      title: "My Skills",
+      subtitle: "A collection of technologies and tools I've worked with throughout my development journey",
+      frontend: "Frontend Development",
+      backend: "Backend Development",
+      embedded: "Embedded Systems",
+      fullstack: "Full-Stack Development",
+      techTitle: "Technologies I Work With",
+    },
+    projects: {
+      title: "Featured Projects",
+      subtitle: "A selection of projects that showcase my skills and experience",
+      tkbDescription: "A comprehensive timetable management system for students, featuring both UI and API components.",
+      esp32Description: "Control Android TV using ESP32 without ADB, demonstrating hardware and software integration.",
+      kahootDescription: "A functional clone of the popular classroom quiz application Kahoot!",
+      web1Description: "University web development project showcasing frontend skills and teamwork.",
+      sguApiDescription: "API for retrieving and processing educational data from the university's system.",
+      web2Description: "Advanced web development project utilizing PHP backend and TypeScript frontend.",
+    },
+    contact: {
+      title: "Get In Touch",
+      subtitle: "Have a project in mind or want to collaborate? Feel free to reach out!",
+      info: "Contact Information",
+      email: "Email",
+      github: "GitHub",
+      location: "Location",
+      locationValue: "Ho Chi Minh City, Vietnam",
+      follow: "Follow Me",
+      sendMessage: "Send Message",
+      name: "Name",
+      namePlaceholder: "Your name",
+      emailPlaceholder: "Your email",
+      message: "Message",
+      messagePlaceholder: "Your message",
+      sendButton: "Send Message",
+    },
+    support: {
+      title: "Support My Work",
+      subtitle:
+        "If you find my projects helpful or want to support my continued development, consider buying me a coffee!",
+      buyMeCoffee: "Buy Me a Coffee",
+      description: "Your support helps me continue creating open-source projects and tutorials for the community.",
+      bankTransfer: "Bank Transfer",
+      bankInfo: "Bank Account Information",
+      bankName: "Bank",
+      accountNumber: "Account Number",
+      accountName: "Account Name",
+      bankNameValue: "ACB Bank",
+      accountNumberValue: "31584167",
+      accountNameValue: "NGUYEN KHAC HIEU",
+    },
+    footer: {
+      copyright: "All rights reserved.",
+    },
+  },
+  vi: {
+    nav: {
+      about: "Giới thiệu",
+      skills: "Kỹ năng",
+      projects: "Dự án",
+      contact: "Liên hệ",
+      support: "Ủng hộ",
+    },
+    hero: {
+      role: "Lập trình viên Full-Stack",
+      downloadResume: "Tải CV",
+    },
+    about: {
+      title: "Giới thiệu về tôi",
+      description1:
+        "Tôi là một lập trình viên đa năng với kinh nghiệm từ phát triển web frontend, backend đến lập trình hệ thống nhúng. Hành trình công nghệ của tôi đã dẫn tôi làm việc trên nhiều dự án đa dạng, từ bài tập đại học đến các ứng dụng thực tế giải quyết vấn đề thực tế.",
+      description2:
+        "Với nền tảng vững chắc về JavaScript, TypeScript, PHP và C/C++ cho hệ thống nhúng, tôi thích thú với việc giải quyết những thách thức phức tạp và biến những ý tưởng sáng tạo thành hiện thực. Tôi đặc biệt đam mê tạo ra những trải nghiệm người dùng trực quan và xây dựng các hệ thống backend mạnh mẽ.",
+    },
+    skills: {
+      title: "Kỹ năng của tôi",
+      subtitle: "Tập hợp các công nghệ và công cụ tôi đã sử dụng trong suốt hành trình phát triển",
+      frontend: "Phát triển Frontend",
+      backend: "Phát triển Backend",
+      embedded: "Hệ thống nhúng",
+      fullstack: "Phát triển Full-Stack",
+      techTitle: "Công nghệ tôi sử dụng",
+    },
+    projects: {
+      title: "Dự án nổi bật",
+      subtitle: "Một số dự án thể hiện kỹ năng và kinh nghiệm của tôi",
+      tkbDescription: "Hệ thống quản lý thời khóa biểu toàn diện cho sinh viên, bao gồm cả giao diện và API.",
+      esp32Description: "Điều khiển Android TV bằng ESP32 không cần ADB, thể hiện sự tích hợp phần cứng và phần mềm.",
+      kahootDescription: "Bản sao chức năng của ứng dụng kiểm tra kiến thức trong lớp học Kahoot!",
+      web1Description: "Dự án phát triển web đại học thể hiện kỹ năng frontend và làm việc nhóm.",
+      sguApiDescription: "API để thu thập và xử lý dữ liệu giáo dục từ hệ thống của trường đại học.",
+      web2Description: "Dự án phát triển web nâng cao sử dụng PHP backend và TypeScript frontend.",
+    },
+    contact: {
+      title: "Liên hệ với tôi",
+      subtitle: "Có dự án trong đầu hoặc muốn hợp tác? Hãy liên hệ với tôi!",
+      info: "Thông tin liên hệ",
+      email: "Email",
+      github: "GitHub",
+      location: "Địa điểm",
+      locationValue: "Thành phố Hồ Chí Minh, Việt Nam",
+      follow: "Theo dõi tôi",
+      sendMessage: "Gửi tin nhắn",
+      name: "Tên",
+      namePlaceholder: "Tên của bạn",
+      emailPlaceholder: "Email của bạn",
+      message: "Tin nhắn",
+      messagePlaceholder: "Tin nhắn của bạn",
+      sendButton: "Gửi tin nhắn",
+    },
+    support: {
+      title: "Ủng hộ công việc của tôi",
+      subtitle:
+        "Nếu bạn thấy các dự án của tôi hữu ích hoặc muốn ủng hộ việc phát triển liên tục của tôi, hãy mua cho tôi một ly cà phê!",
+      buyMeCoffee: "Mua cà phê cho tôi",
+      description: "Sự ủng hộ của bạn giúp tôi tiếp tục tạo ra các dự án mã nguồn mở và hướng dẫn cho cộng đồng.",
+      bankTransfer: "Chuyển khoản ngân hàng",
+      bankInfo: "Thông tin tài khoản ngân hàng",
+      bankName: "Ngân hàng",
+      accountNumber: "Số tài khoản",
+      accountName: "Tên tài khoản",
+      bankNameValue: "ACB Bank",
+      accountNumberValue: "31584167",
+      accountNameValue: "NGUYEN KHAC HIEU",
+    },
+    footer: {
+      copyright: "Tất cả quyền được bảo lưu.",
+    },
+  },
+}
+
+export type Language = keyof typeof translations
+export type TranslationKey = keyof typeof translations.en
