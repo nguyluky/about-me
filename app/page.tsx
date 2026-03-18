@@ -8,12 +8,13 @@ import {
     Facebook,
     Folder,
     Github,
+    Linkedin,
     Mail,
     MessageSquare,
     User,
 } from "lucide-react";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type SkillCategory = {
     title: string;
@@ -99,6 +100,36 @@ export function SkillsSection() {
     );
 }
 
+function useActiveSection(ids: string[]) {
+    const [active, setActive] = useState(ids[0]);
+
+    useEffect(() => {
+        const observers: IntersectionObserver[] = [];
+
+        ids.forEach((id) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    if (entry.isIntersecting) {
+                        setActive(id);
+                    }
+                },
+                {
+                    threshold: 0.2, // chỉnh độ nhạy
+                }
+            );
+
+            observer.observe(el);
+            observers.push(observer);
+        });
+
+        return () => observers.forEach((o) => o.disconnect());
+    }, [ids]);
+
+    return active;
+}
 
 function Title() {
     const titles = [
@@ -164,36 +195,42 @@ function Title() {
         </div>
     );
 }
+const navLinks = [
+    { name: "About", href: "#about", icon: User },
+    { name: "Skills", href: "#skills", icon: Code },
+    { name: "Projects", href: "#projects", icon: Folder },
+    { name: "Experience", href: "#experience", icon: Briefcase },
+    { name: "Contact", href: "#contact", icon: MessageSquare },
+];
 
+const contacts = [
+    {
+        title: "Send Email",
+        link: "mailto:nguyluky@gmail.com",
+        icon: Mail,
+    },
+    {
+        title: "Github",
+        link: "https://github.com/nguyluky",
+        icon: Github
+    },
+    {
+        title: "Facebook",
+        link: "https://www.facebook.com/NguyLuky/",
+        icon: Facebook
+    }
+];
 
 export default function AboutMe() {
     const { t } = useLanguage();
 
-    const navLinks = [
-        { name: "About", href: "#about", icon: User },
-        { name: "Skills", href: "#skills", icon: Code },
-        { name: "Projects", href: "#projects", icon: Folder },
-        { name: "Experience", href: "#experience", icon: Briefcase },
-        { name: "Contact", href: "#contact", icon: MessageSquare },
-    ];
 
-    const contacts = [
-        {
-            title: "Email",
-            link: "mailto:nguyluky@gmail.com",
-            icon: Mail,
-        },
-        {
-            title: "Github",
-            link: "https://github.com/nguyluky",
-            icon: Github
-        },
-        {
-            title: "Facebook",
-            link: "https://www.facebook.com/NguyLuky/",
-            icon: Facebook
-        }
-    ];
+
+    const sectionIds = useMemo(() => {
+        return [...navLinks.map((l) => l.href.replace("#", "")), 'hero']
+    }, [navLinks]);
+    const active = useActiveSection(sectionIds);
+    console.log(active)
 
     return (
         <>
@@ -218,30 +255,46 @@ export default function AboutMe() {
             <div className="min-h-screen bg-background text-foreground">
                 <aside className="fixed left-6 top-1/2 transform -translate-y-1/2 w-20 flex flex-col items-center justify-center gap-6 z-40">
                     <div className="flex flex-col items-center gap-8">
-                        {/* <div className="text-center">
-                        <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                            Luky
-                        </h1>
-                    </div> */}
-
                         <nav className="flex flex-col items-center gap-6">
                             {navLinks.map((link) => {
                                 const IconComponent = link.icon;
+                                const isActive = active === link.href.replace("#", "");
                                 return (
                                     <div
-                                        className="relative"
+                                        className="relative group"
                                         key={link.name}
                                     >
                                         <a
                                             href={link.href}
-                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all duration-300 text-muted-foreground hover:text-primary"
+                                            className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all duration-300
+                                                ${isActive
+                                                    ? "border-primary bg-primary/20 text-primary scale-110"
+                                                    : "border-border text-muted-foreground hover:border-primary hover:bg-primary/10 hover:text-primary"
+                                                }
+                                            `}
                                         >
                                             <IconComponent className="w-4 h-4" />
                                         </a>
 
                                         {/* TODO */}
-                                        <span className="absolute top-1/2 left-full transform -translate-y-1/2 ml-2 hidden">
+                                        <span className=" absolute top-1/2 left-full -translate-y-1/2 ml-3
+                                            px-3 py-1 text-xs rounded-md
+                                            bg-primary text-primary-foreground whitespace-nowrap
+
+                                            opacity-0 translate-x-[-8px] 
+                                            group-hover:opacity-100 group-hover:translate-x-0
+
+                                            transition-all duration-300 ease-out">
                                             {link.name}
+                                            <span
+                                                className="
+                                                absolute top-1/2 left-0 -translate-y-1/2 -translate-x-full
+                                                w-0 h-0
+                                                border-t-[6px] border-b-[6px]
+                                                border-r-[6px]
+                                                border-t-transparent border-b-transparent border-r-primary
+                                                "
+                                            />
                                         </span>
                                     </div>
                                 );
@@ -251,24 +304,47 @@ export default function AboutMe() {
                         <div className="flex flex-col items-center gap-4 border-t border-border pt-4">
                             {
                                 contacts.map(e => (
-                                    <a href={e.link}
-                                        title={e.title}
+                                    <div
+                                        className="relative group"
                                         key={e.title}
-                                        target="_blank"
-                                        className="w-10 h-10 flex items-center justify-center rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all duration-300 text-muted-foreground hover:text-primary"
                                     >
-                                        <e.icon className="w-4 h-4" />
-                                    </a>
+                                        <a href={e.link}
+                                            title={e.title}
+                                            target="_blank"
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all duration-300 text-muted-foreground hover:text-primary"
+                                        >
+                                            <e.icon className="w-4 h-4" />
+                                            <span className=" absolute top-1/2 left-full -translate-y-1/2 ml-3
+                                            px-3 py-1 text-xs rounded-md
+                                            bg-primary text-primary-foreground whitespace-nowrap
+
+                                            opacity-0 translate-x-[-8px] 
+                                            group-hover:opacity-100 group-hover:translate-x-0
+
+                                            transition-all duration-300 ease-out">
+                                            {e.title}
+                                            <span
+                                                className="
+                                                absolute top-1/2 left-0 -translate-y-1/2 -translate-x-full
+                                                w-0 h-0
+                                                border-t-[6px] border-b-[6px]
+                                                border-r-[6px]
+                                                border-t-transparent border-b-transparent border-r-primary
+                                                "
+                                            />
+                                        </span>
+                                        </a>
+                                    </div>
                                 ))
                             }
                         </div>
                     </div>
                 </aside>
 
-                <div className="ml-20 flex justify-center">
-                    <main className="max-w-4xl">
+                <main className="ml-20 flex justify-center h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
+                    <div className="max-w-4xl ">
                         {/* Main Content */}
-                        <section className="flex items-center h-screen">
+                        <section id="hero" className="snap-start flex items-center h-screen">
                             <div className=" m-auto">
                                 <div className="space-y-6">
                                     <div className="space-y-2">
@@ -311,7 +387,7 @@ export default function AboutMe() {
                             </div>
                         </section>
 
-                        <section id="about" className="flex items-center h-screen border-t">
+                        <section id="about" className="snap-start flex items-center h-screen border-t">
                             <div className="max-w-5xl mx-auto space-y-10">
                                 <div>
                                     <h2 className="text-3xl md:text-4xl font-bold mb-8">About Me</h2>
@@ -396,11 +472,11 @@ export default function AboutMe() {
                                 </div>
                             </div>
                         </section>
-                        <section id="skills" className="flex items-center h-screen border-t w-full">
+                        <section id="skills" className="snap-start flex items-center h-screen border-t w-full">
 
                             <SkillsSection />
                         </section>
-                        <section id="projects" className="flex items-center h-screen border-t w-full">
+                        <section id="projects" className="snap-start flex items-center h-screen border-t w-full">
                             <div className="max-w-4xl mx-auto">
                                 <h2 className="text-3xl md:text-4xl font-bold mb-12">Featured Projects</h2>
 
@@ -499,8 +575,152 @@ export default function AboutMe() {
                                 </div>
                             </div>
                         </section>
-                    </main>
-                </div>
+
+                        <section id="experience" className="snap-start flex items-center h-screen border-t w-full">
+                            <div className="max-w-4xl mx-auto">
+                                <h2 className="text-3xl md:text-4xl font-bold mb-12">Experience</h2>
+
+                                <div className="space-y-8">
+
+                                    {/* Experience 1 */}
+                                    <div className="border-l-2 border-primary pl-8 pb-8">
+                                        <div className="flex justify-between items-start mb-2 flex-col md:flex-row gap-2">
+                                            <div>
+                                                <h3 className="text-xl font-semibold">Full-Stack Mentor</h3>
+                                                <p className="text-primary font-medium">Cybersoft Academy</p>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground whitespace-nowrap">2024</p>
+                                        </div>
+
+                                        <p className="text-muted-foreground mb-3">
+                                            Mentored students in building full-stack applications and solving real development problems.
+                                        </p>
+
+                                        <ul className="space-y-1 text-sm text-muted-foreground">
+                                            <li>• Guided ~20 students through React and Node.js projects</li>
+                                            <li>• Reviewed code and explained architecture decisions</li>
+                                            <li>• Helped debug real-world issues and improve coding practices</li>
+                                        </ul>
+                                    </div>
+
+                                    {/* Experience 2 */}
+                                    <div className="border-l-2 border-muted pl-8 pb-8">
+                                        <div className="flex justify-between items-start mb-2 flex-col md:flex-row gap-2">
+                                            <div>
+                                                <h3 className="text-xl font-semibold">Independent Developer</h3>
+                                                <p className="text-primary font-medium">Personal Projects</p>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground whitespace-nowrap">2023 - 2025</p>
+                                        </div>
+
+                                        <p className="text-muted-foreground mb-3">
+                                            Built and maintained multiple real-world projects focused on backend systems, reverse engineering, and embedded development.
+                                        </p>
+
+                                        <ul className="space-y-1 text-sm text-muted-foreground">
+                                            <li>• Developed systems used by real users (1,500+ users)</li>
+                                            <li>• Worked with undocumented APIs and protocol analysis</li>
+                                            <li>• Designed and built full-stack applications end-to-end</li>
+                                        </ul>
+                                    </div>
+
+                                    {/* Experience 3 */}
+                                    <div className="border-l-2 border-muted pl-8">
+                                        <div className="flex justify-between items-start mb-2 flex-col md:flex-row gap-2">
+                                            <div>
+                                                <h3 className="text-xl font-semibold">Self-Directed Learning</h3>
+                                                <p className="text-primary font-medium">Engineering & Systems</p>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground whitespace-nowrap">Ongoing</p>
+                                        </div>
+
+                                        <p className="text-muted-foreground mb-3">
+                                            Focused on learning system internals, networking, and embedded development through hands-on projects.
+                                        </p>
+
+                                        <ul className="space-y-1 text-sm text-muted-foreground">
+                                            <li>• Explored system behavior through reverse engineering</li>
+                                            <li>• Built projects combining software and hardware</li>
+                                            <li>• Learned by solving real-world technical problems</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </section>
+                        <section id="contact" className="snap-start flex items-center min-h-screen border-t w-full">
+                            <div className="max-w-4xl mx-auto space-y-10">
+
+                                {/* TEXT */}
+                                <div>
+                                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                                        Let's work together
+                                    </h2>
+
+                                    <p className="text-lg text-muted-foreground max-w-2xl">
+                                        I'm open to interesting projects, collaborations, or just a quick chat.
+                                        If you're building something or have an idea, feel free to reach out.
+                                    </p>
+                                </div>
+
+                                {/* CONTACT BUTTONS */}
+                                <div className="flex flex-wrap gap-4">
+                                    {contacts.map((e, i) => (
+                                        <a
+                                            key={i}
+                                            href={e.link}
+                                            className={
+                                                i === 0
+                                                    ? "inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition font-medium"
+                                                    : "inline-flex items-center gap-2 px-6 py-3 border border-border hover:bg-secondary rounded-lg transition font-medium"
+                                            }
+                                        >
+                                            <e.icon className="w-5 h-5" />
+                                            {e.title}
+                                        </a>
+                                    ))}
+                                </div>
+
+                                {/* SUPPORT */}
+                                <div className="border-t pt-6 space-y-4">
+                                    <h3 className="font-semibold text-lg">Support My Work</h3>
+
+                                    <p className="text-sm text-muted-foreground max-w-2xl">
+                                        I build open-source projects and tools. If you find them useful,
+                                        you can support my work or contribute to help me keep improving them.
+                                    </p>
+
+                                    <div className="flex flex-wrap gap-4">
+                                        <a
+                                            href="https://github.com/nguyluky"
+                                            target="_blank"
+                                            className="inline-flex items-center gap-2 px-5 py-2 border rounded-lg hover:bg-secondary transition text-sm"
+                                        >
+                                            ⭐ Star on GitHub
+                                        </a>
+
+                                        <a
+                                            href="https://buymeacoffee.com/nguyluky"
+                                            target="_blank"
+                                            className="inline-flex items-center gap-2 px-5 py-2 border rounded-lg hover:bg-secondary transition text-sm"
+                                        >
+                                            ☕ Buy me a coffee
+                                        </a>
+
+                                        <a
+                                            href="https://github.com/sponsors/nguyluky"
+                                            target="_blank"
+                                            className="inline-flex items-center gap-2 px-5 py-2 border rounded-lg hover:bg-secondary transition text-sm"
+                                        >
+                                            💖 Sponsor
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+                    </div>
+                </main>
             </div>
         </>
 
