@@ -14,7 +14,7 @@ export const translations = {
     about: {
       title: "About Me",
       description1:
-        "I'm a versatile developer with experience spanning from frontend and backend web development to embedded systems programming. My journey in technology has led me to work on a diverse range of projects, from university assignments to practical applications that solve real-world problems.",
+        "I am a software engineer who enjoys turning everyday problems into engineering challenges. My projects often begin with simple personal frustrations—such as losing a TV remote or struggling with a university system—and evolve into complete technical solutions involving reverse engineering, backend systems, and full-stack applications. My primary interests lie in **backend systems, protocol analysis, and embedded development**, where software interacts with real-world constraints. I enjoy exploring how systems work internally, analyzing network behavior, and designing tools that improve developer productivity. I am particularly motivated by solving technical problems that require both **low-level understanding and system-level thinking**. Whether it is implementing undocumented protocols on embedded devices or designing APIs used by thousands of users, I enjoy building systems that are both practical and technically interesting.",
       description2:
         "With a strong foundation in JavaScript, TypeScript, PHP, and C/C++ for embedded systems, I enjoy tackling complex challenges and bringing innovative solutions to life. I'm particularly passionate about creating intuitive user experiences and building robust backend systems.",
     },

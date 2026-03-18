@@ -10,8 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Khắc Hiếu | Full-Stack Developer",
   description:
-    "Personal portfolio showcasing my skills in web development and embedded systems",
-  generator: "v0.dev",
+    "Personal portfolio showcasing my skills in web development and embedded systems"
 };
 
 export default function RootLayout({
