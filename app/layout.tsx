@@ -8,20 +8,29 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://about.nguyluky.site"),
   title: "NguyLuky Portfolio",
   description: "fullstack dev Portfolio",
   openGraph: {
     title: "NguyLuky Portfolio",
     description: "fullstack dev Portfolio",
-    siteName: "NguyLuky",
+    url: "https://about.nguyluky.site",
+    siteName: "NguyLuky Portfolio",
+    type: "website",
     images: [
       {
         url: "/thumbnail.png",
         width: 1200,
         height: 630,
+        alt: "NguyLuky Portfolio",
       },
     ],
-    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NguyLuky Portfolio",
+    description: "fullstack dev Portfolio",
+    images: ["/thumbnail.png"],
   },
 };
 
