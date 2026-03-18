@@ -8,9 +8,21 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Khắc Hiếu | Full-Stack Developer",
-  description:
-    "Personal portfolio showcasing my skills in web development and embedded systems"
+  title: "NguyLuky Portfolio",
+  description: "fullstack dev Portfolio",
+  openGraph: {
+    title: "NguyLuky Portfolio",
+    description: "fullstack dev Portfolio",
+    siteName: "NguyLuky",
+    images: [
+      {
+        url: "/thumbnail.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({
