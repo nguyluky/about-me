@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import type React from "react";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -60,7 +61,9 @@ export default function RootLayout({
             borderRadius: "0.75rem",
           }}
         />
-        <LanguageProvider>{children}</LanguageProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LanguageProvider>{children}</LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

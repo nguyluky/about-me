@@ -1,6 +1,8 @@
 "use client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIsMobile } from "@/hooks/use-mobile";
+import ThemeToggle from "@/components/ThemeToggle";
 import {
     Briefcase,
     Code,
@@ -10,11 +12,16 @@ import {
     Github,
     Linkedin,
     Mail,
+    Menu,
     MessageSquare,
+    Moon,
+    Sun,
     User,
+    X,
 } from "lucide-react";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
+import { useTheme } from "next-themes";
 
 type SkillCategory = {
     title: string;
@@ -60,7 +67,7 @@ function SkillCard({ title, icons, description, colSpan = "" }: SkillCategory) {
 
     return (
         <div
-            className={`p-6 border rounded-2xl space-y-4 hover:bg-secondary/60 transition-colors ${colSpan}`}
+            className={`p-6 border rounded-2xl gap-4 hover:bg-secondary/60 transition-colors ${colSpan} h-full flex flex-col`}
         >
             <h3 className="font-semibold text-lg">{title}</h3>
 
@@ -78,7 +85,7 @@ function SkillCard({ title, icons, description, colSpan = "" }: SkillCategory) {
             </div>
 
             {description ? (
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed mt-auto">
                     {description}
                 </p>
             ) : null}
@@ -86,7 +93,7 @@ function SkillCard({ title, icons, description, colSpan = "" }: SkillCategory) {
     );
 }
 
-export function SkillsSection() {
+function SkillsSection() {
     return (
         <div className="max-w-5xl space-y-10 w-full">
             <h2 className="text-3xl md:text-4xl font-bold">Technical Skills</h2>
@@ -94,6 +101,42 @@ export function SkillsSection() {
             <div className="grid md:grid-cols-2 gap-6 w-full">
                 {skillCategories.map((skill) => (
                     <SkillCard key={skill.title} {...skill} />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function SkillsSectionMobile() {
+    const [current, setCurrent] = useState(0);
+
+    const prevSlide = () => {
+        setCurrent((prev) => (prev === 0 ? skillCategories.length - 1 : prev - 1));
+    };
+
+    const nextSlide = () => {
+        setCurrent((prev) => (prev === skillCategories.length - 1 ? 0 : prev + 1));
+    };
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            nextSlide();
+        }, 3000);
+
+        return () => clearInterval(timer);
+    }, []);
+    return (
+        <div className="relative mx-auto w-full max-w-3xl overflow-visible rounded-2xl space-y-10">
+            <h2 className="text-3xl md:text-4xl font-bold">Technical Skills</h2>
+
+            <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${current * 100}%)` }}
+            >
+                {skillCategories.map((skill) => (
+                    <div className="w-full flex-shrink-0 px-2" key={skill.title}>
+                        <SkillCard key={skill.title} {...skill} />
+                    </div>
                 ))}
             </div>
         </div>
@@ -176,7 +219,7 @@ function Title() {
     }, [animate]);
 
     return (
-        <div className="h-[72px] md:h-[84px] overflow-hidden">
+        <div className="h-[95px] md:h-[84px] overflow-hidden">
             <div
                 className={animate ? "ease-in-out duration-700 transition-transform" : ""}
                 style={{
@@ -186,7 +229,7 @@ function Title() {
                 {loopTitles.map((title, i) => (
                     <h2
                         key={i}
-                        className="h-[72px] md:h-[84px] flex items-center text-5xl md:text-6xl font-bold"
+                        className="h-[100px] md:h-[84px] flex items-center text-5xl md:text-6xl font-bold"
                     >
                         {title}
                     </h2>
@@ -221,10 +264,63 @@ const contacts = [
     }
 ];
 
+function SideThemeToggle() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) {
+    return (
+      <button
+        className="w-10 h-10 flex items-center justify-center rounded-full border border-border text-muted-foreground"
+        aria-label="Toggle theme"
+        type="button"
+      >
+        <Sun className="w-4 h-4" />
+      </button>
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
+
+  return (
+    <>
+      <button
+        type="button"
+        aria-label="Toggle theme"
+        onClick={() => setTheme(isDark ? "light" : "dark")}
+        className="w-10 h-10 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:bg-primary/10 hover:text-primary transition-all duration-300"
+      >
+        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      </button>
+
+      <span
+        className="absolute top-1/2 left-full -translate-y-1/2 ml-3
+        px-3 py-1 text-xs rounded-md
+        bg-primary text-primary-foreground whitespace-nowrap
+        opacity-0 translate-x-[-8px]
+        group-hover:opacity-100 group-hover:translate-x-0
+        transition-all duration-300 ease-out"
+      >
+        {isDark ? "Light mode" : "Dark mode"}
+        <span
+          className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-full
+          w-0 h-0
+          border-t-[6px] border-b-[6px]
+          border-r-[6px]
+          border-t-transparent border-b-transparent border-r-primary"
+        />
+      </span>
+    </>
+  );
+}
+
 export default function AboutMe() {
-    const { t } = useLanguage();
+    // const { t } = useLanguage();
+    const isMobile = useIsMobile()
 
-
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     const sectionIds = useMemo(() => {
         return [...navLinks.map((l) => l.href.replace("#", "")), 'hero']
@@ -253,7 +349,9 @@ export default function AboutMe() {
                 <meta name="twitter:image" content="https://about.nguyluky.site/thumbnail.png" />
             </Head>
             <div className="min-h-screen bg-background text-foreground">
-                <aside className="fixed left-6 top-1/2 transform -translate-y-1/2 w-20 flex flex-col items-center justify-center gap-6 z-40">
+                <aside className="fixed left-6 top-1/2 transform -translate-y-1/2 w-20 flex-col items-center justify-center gap-6 z-40
+                    hidden md:flex
+                ">
                     <div className="flex flex-col items-center gap-8">
                         <nav className="flex flex-col items-center gap-6">
                             {navLinks.map((link) => {
@@ -322,29 +420,64 @@ export default function AboutMe() {
                                             group-hover:opacity-100 group-hover:translate-x-0
 
                                             transition-all duration-300 ease-out">
-                                            {e.title}
-                                            <span
-                                                className="
+                                                {e.title}
+                                                <span
+                                                    className="
                                                 absolute top-1/2 left-0 -translate-y-1/2 -translate-x-full
                                                 w-0 h-0
                                                 border-t-[6px] border-b-[6px]
                                                 border-r-[6px]
                                                 border-t-transparent border-b-transparent border-r-primary
                                                 "
-                                            />
-                                        </span>
+                                                />
+                                            </span>
                                         </a>
                                     </div>
                                 ))
                             }
+
+                            <div className="relative group">
+                                <SideThemeToggle />
+
+                            </div>
                         </div>
                     </div>
                 </aside>
 
-                <main className="ml-20 flex justify-center h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
-                    <div className="max-w-4xl ">
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="lg:hidden fixed top-6 right-6 z-50 p-2 hover:bg-secondary rounded-lg transition-colors"
+                >
+                    {isMenuOpen ? (
+                        <X className="w-6 h-6" />
+                    ) : (
+                        <Menu className="w-6 h-6" />
+                    )}
+                </button>
+
+                {isMenuOpen && (
+                    <div className="lg:hidden fixed bg-background/80 backdrop-blur z-40 h-fit w-fit top-16 right-10 shadow rounded">
+                        <nav className="px-6 py-2 space-y-4">
+                            {navLinks.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="block text-muted-foreground hover:text-primary transition-colors py-2 text-sm font-medium text-right"
+                                >
+                                    {link.name}
+                                </a>
+                            ))}
+                        </nav>
+                    </div>
+                )}
+
+                <main className=" flex justify-center h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth
+                    md:ml-20 p-6 overflow-x-hidden
+                ">
+                    <div className="max-w-full md:max-w-4xl">
                         {/* Main Content */}
-                        <section id="hero" className="snap-start flex items-center h-screen">
+                        <section id="hero" className="snap-start flex items-center min-h-screen py-4">
                             <div className=" m-auto">
                                 <div className="space-y-6">
                                     <div className="space-y-2">
@@ -387,7 +520,7 @@ export default function AboutMe() {
                             </div>
                         </section>
 
-                        <section id="about" className="snap-start flex items-center h-screen border-t">
+                        <section id="about" className="snap-start flex items-center min-h-screen py-4 border-t">
                             <div className="max-w-5xl mx-auto space-y-10">
                                 <div>
                                     <h2 className="text-3xl md:text-4xl font-bold mb-8">About Me</h2>
@@ -437,7 +570,7 @@ export default function AboutMe() {
                                         </div>
 
                                         {/* RIGHT - SKILL BOXES */}
-                                        <div className="grid gap-4 h-full">
+                                        <div className="gap-4 h-full hidden md:grid">
 
                                             <div className="p-5 border rounded-2xl hover:bg-secondary transition-colors">
                                                 <h3 className="font-semibold mb-2">Backend Systems</h3>
@@ -472,11 +605,13 @@ export default function AboutMe() {
                                 </div>
                             </div>
                         </section>
-                        <section id="skills" className="snap-start flex items-center h-screen border-t w-full">
+                        <section id="skills" className="snap-start flex items-center min-h-screen py-4 border-t w-full">
+                            {
+                                isMobile ? <SkillsSectionMobile /> : <SkillsSection />
+                            }
 
-                            <SkillsSection />
                         </section>
-                        <section id="projects" className="snap-start flex items-center h-screen border-t w-full">
+                        <section id="projects" className="snap-start flex items-center min-h-screen py-4 border-t w-full">
                             <div className="max-w-4xl mx-auto">
                                 <h2 className="text-3xl md:text-4xl font-bold mb-12">Featured Projects</h2>
 
@@ -576,7 +711,7 @@ export default function AboutMe() {
                             </div>
                         </section>
 
-                        <section id="experience" className="snap-start flex items-center h-screen border-t w-full">
+                        <section id="experience" className="snap-start flex items-center min-h-screen py-4 border-t w-full">
                             <div className="max-w-4xl mx-auto">
                                 <h2 className="text-3xl md:text-4xl font-bold mb-12">Experience</h2>
 
