@@ -264,56 +264,68 @@ const contacts = [
     }
 ];
 
-function SideThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+function SideThemeToggle({ isMobile }: { isMobile: boolean }) {
+    const { resolvedTheme, setTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+    useEffect(() => setMounted(true), []);
 
-  if (!mounted) {
+
+    const iconClass = isMobile ? "w-6 h-6" : "w-4 h-4"
+
+    if (!mounted) {
+        return (
+            <button
+                className={
+                    isMobile ? "lg:hidden fixed top-6 right-16 z-50 p-2 hover:bg-secondary rounded-lg transition-colors" :
+                        "w-10 h-10 flex items-center justify-center rounded-full border border-border text-muted-foreground"}
+                aria-label="Toggle theme"
+                type="button"
+            >
+                <Sun className={iconClass} />
+            </button>
+        );
+    }
+
+    const isDark = resolvedTheme === "dark";
+
     return (
-      <button
-        className="w-10 h-10 flex items-center justify-center rounded-full border border-border text-muted-foreground"
-        aria-label="Toggle theme"
-        type="button"
-      >
-        <Sun className="w-4 h-4" />
-      </button>
-    );
-  }
+        <>
+            <button
+                type="button"
+                aria-label="Toggle theme"
+                onClick={() => setTheme(isDark ? "light" : "dark")}
+                className={
+                    isMobile ? "lg:hidden fixed top-6 right-16 z-50 p-2 hover:bg-secondary rounded-lg transition-colors" :
+                        "w-10 h-10 flex items-center justify-center rounded-full border border-border text-muted-foreground"}
+            >
+                {isDark ? <Sun className={iconClass} /> : <Moon className={iconClass} />}
+            </button>
 
-  const isDark = resolvedTheme === "dark";
-
-  return (
-    <>
-      <button
-        type="button"
-        aria-label="Toggle theme"
-        onClick={() => setTheme(isDark ? "light" : "dark")}
-        className="w-10 h-10 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:bg-primary/10 hover:text-primary transition-all duration-300"
-      >
-        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-      </button>
-
-      <span
-        className="absolute top-1/2 left-full -translate-y-1/2 ml-3
+            {
+                !isMobile && (
+                    <span
+                        className="absolute top-1/2 left-full -translate-y-1/2 ml-3
         px-3 py-1 text-xs rounded-md
         bg-primary text-primary-foreground whitespace-nowrap
         opacity-0 translate-x-[-8px]
         group-hover:opacity-100 group-hover:translate-x-0
         transition-all duration-300 ease-out"
-      >
-        {isDark ? "Light mode" : "Dark mode"}
-        <span
-          className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-full
+                    >
+                        {isDark ? "Light mode" : "Dark mode"}
+                        <span
+                            className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-full
           w-0 h-0
           border-t-[6px] border-b-[6px]
           border-r-[6px]
           border-t-transparent border-b-transparent border-r-primary"
-        />
-      </span>
-    </>
-  );
+                        />
+                    </span>
+                )
+            }
+
+        </>
+    );
 }
 
 export default function AboutMe() {
@@ -436,13 +448,20 @@ export default function AboutMe() {
                                 ))
                             }
 
+                        </div>
+                        <div className="flex flex-col items-center gap-4 border-t border-border pt-4">
+
                             <div className="relative group">
-                                <SideThemeToggle />
+                                <SideThemeToggle isMobile={false} />
 
                             </div>
                         </div>
                     </div>
                 </aside>
+
+
+                <SideThemeToggle isMobile={true} />
+
 
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
