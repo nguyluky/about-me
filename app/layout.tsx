@@ -10,13 +10,45 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://about.nguyluky.site"),
-  title: "NguyLuky Portfolio",
-  description: "fullstack dev Portfolio",
+  title: {
+    default: "NguyLuky | Software Developer Portfolio",
+    template: "%s | NguyLuky",
+  },
+  description:
+    "Portfolio of NguyLuky, a software developer focused on backend systems, APIs, reverse engineering, and embedded development.",
+  keywords: [
+    "NguyLuky",
+    "software developer",
+    "backend developer",
+    "fullstack developer",
+    "embedded development",
+    "reverse engineering",
+    "portfolio",
+  ],
+  authors: [{ name: "NguyLuky", url: "https://about.nguyluky.site" }],
+  creator: "NguyLuky",
+  publisher: "NguyLuky",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: "NguyLuky Portfolio",
-    description: "fullstack dev Portfolio",
+    title: "NguyLuky | Software Developer Portfolio",
+    description:
+      "Backend systems, APIs, reverse engineering, and embedded projects built by NguyLuky.",
     url: "https://about.nguyluky.site",
     siteName: "NguyLuky Portfolio",
+    locale: "en_US",
     type: "website",
     images: [
       {
@@ -29,10 +61,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NguyLuky Portfolio",
-    description: "fullstack dev Portfolio",
+    title: "NguyLuky | Software Developer Portfolio",
+    description:
+      "Backend systems, APIs, reverse engineering, and embedded projects built by NguyLuky.",
+    creator: "@nguyluky",
     images: ["/thumbnail.png"],
   },
+  category: "technology",
 };
 
 export default function RootLayout({
@@ -41,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ToastContainer
           position="top-right"
